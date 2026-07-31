@@ -24,6 +24,7 @@ window_title=reStream                     # stream window title is reStream
 video_filters=""                          # list of ffmpeg filters to apply
 unsecure_connection=false                 # Establish a unsecure connection that is faster
 extra_video_filters=""                    # Extra video filters to add at the end
+crop=false                                # Crop the Remarkable toolbar from the frame edge
 dark_mode="${REMARKABLE_DARK:-false}"     # Dark mode
 ssh_key="${SSH_KEY:-~/.ssh/remarkable}"   # SSH key file
 
@@ -109,6 +110,10 @@ while [ $# -gt 0 ]; do
             dark_mode=true
             shift
             ;;
+        --crop)
+            crop=true
+            shift
+            ;;
         --grey)
             extra_video_filters="${extra_video_filters:+$extra_video_filters,}eq=brightness=0.1:contrast=0.6"
             shift
@@ -119,7 +124,7 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         -h | --help)
-            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--grey] [--hflip]"
+            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--crop] [--grey] [--hflip]"
             echo "Examples:"
             echo "	$0                               # live view in portrait (default)"
             echo "	$0 10.11.99.1                    # connect to specific IP (same as -s)"
@@ -303,6 +308,15 @@ set --
 
 # rotate 90 degrees if landscape=true
 $landscape && video_filters="$video_filters,transpose=1"
+
+# Crop the Remarkable toolbar : crop 112 pixels from the edge of the frame
+if $crop; then
+    if $landscape; then
+        video_filters="$video_filters,crop=in_w:in_h-112:0:112"
+    else
+        video_filters="$video_filters,crop=in_w-112:in_h:112:0"
+    fi
+fi
 
 # Scale and add padding if we are targeting a webcam because a lot of services
 # expect a size of exactly 1280x720 (tested in Firefox, MS Teams, and Skype for
