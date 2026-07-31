@@ -114,6 +114,7 @@ $ ssh root@10.11.99.1 'chmod +x /home/root/restream'
 - `-u --unsecure-connection`: send framebuffer data over an unencrypted TCP-connection, resulting in more fps and less load on the reMarkable. See [Netcat](#netcat) for installation instructions.
 - `-e --extra-filters`: pass extra video-filters to ffplay/ffmpeg (pass as a comma-seperated list)
 - `-d --dark-mode`: Dark mode. Make background black and text white.
+- `--grey`: Grey e-ink display mode (applies grey filter to the white or dark mode)
 
 If you have problems, don't hesitate to [open an issue](https://github.com/rien/reStream/issues/new) or [send me an email](mailto:rien.maertens@posteo.be).
 

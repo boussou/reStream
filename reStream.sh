@@ -109,13 +109,17 @@ while [ $# -gt 0 ]; do
             dark_mode=true
             shift
             ;;
+        --grey)
+            extra_video_filters="${extra_video_filters:+$extra_video_filters,}eq=brightness=0.1:contrast=0.6"
+            shift
+            ;;
         -i | --identity)
             ssh_key="$2"
             shift
             shift
             ;;
         -h | --help)
-            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
+            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--grey] [--hflip]"
             echo "Examples:"
             echo "	$0                               # live view in portrait (default)"
             echo "	$0 10.11.99.1                    # connect to specific IP (same as -s)"
@@ -124,6 +128,7 @@ while [ $# -gt 0 ]; do
             echo "	$0 -c                            # show a cursor where the pen is hovering (rM2 only)"
             echo "	$0 -s 192.168.0.10               # connect to different IP"
             echo "	$0 -i ~/.ssh/reMarkable          # use specific SSH key"
+            echo "	$0 --grey                        # apply grey e-ink display mode (works in dark mode too)"
             echo "	$0 -o remarkable.mp4             # record to a file"
             echo "	$0 -o udp://dest:1234 -f mpegts  # record to a stream"
             echo "	$0 -w --mirror                   # write to a webcam (yuv420p + resize + mirror)"
