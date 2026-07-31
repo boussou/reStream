@@ -99,18 +99,21 @@ $ ssh root@10.11.99.1 'chmod +x /home/root/restream'
 
 ### Options
 
+- `[IP]`: positional argument specifying the reMarkable IP address (alternative to `-s`)
 - `-h --help`: show usage information
-- `-p --portrait`: shows the reMarkable screen in portrait mode (default: landscape mode, 90 degrees rotated tot the right)
+- `-p --portrait`: shows the reMarkable screen in portrait mode (default: landscape mode, 90 degrees rotated to the right)
+- `-l --landscape`: shows the reMarkable screen in landscape mode
 - `-s --source`: the ssh destination of the reMarkable (default: `root@10.11.99.1`)
+- `-i --identity`: path to the SSH private key file (default: `~/V/aws/remarkable`)
 - `-o --output`: path of the output where the video should be recorded, as understood by `ffmpeg`; if this is `-`, the video is displayed in a new window and not recorded anywhere (default: `-`)
-- `-f --format`: when recording to an output, this option is used to force the encoding format; if this is `-`, `ffmpeg`’s auto format detection based on the file extension is used (default: `-`).
+- `-f --format`: when recording to an output, this option is used to force the encoding format; if this is `-`, `ffmpeg`'s auto format detection based on the file extension is used (default: `-`).
 - `-w --webcam`: record to a video4linux2 web cam device. By default the first found web cam is taken, this can be overwritten with `-o`. The video is scaled to 1280x720 to ensure compatibility with MS Teams, Skype for business and other programs which need this specific format. See [Video4Linux Loopback](#video4linux-loopback) for installation instructions.
 - `--mirror`: mirror the web cam video (`--webcam` has to be set). By default or as only choice, some programs, such as Zoom and Discord, mirror the camera. This flag restores the correct orientation.
 - `-m --measure`: use `pv` to measure how much data throughput you have (good to experiment with parameters to speed up the pipeline)
 - `-t --title`: set a custom window title for the video stream. The default title is "reStream". This option is disabled when using `-o --output`
 - `-u --unsecure-connection`: send framebuffer data over an unencrypted TCP-connection, resulting in more fps and less load on the reMarkable. See [Netcat](#netcat) for installation instructions.
 - `-e --extra-filters`: pass extra video-filters to ffplay/ffmpeg (pass as a comma-seperated list)
-- `--dark-mode`: Dark mode. Make background black and text white.
+- `-d --dark-mode`: Dark mode. Make background black and text white.
 
 If you have problems, don't hesitate to [open an issue](https://github.com/rien/reStream/issues/new) or [send me an email](mailto:rien.maertens@posteo.be).
 
