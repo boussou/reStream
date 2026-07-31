@@ -25,7 +25,7 @@ video_filters=""                          # list of ffmpeg filters to apply
 unsecure_connection=false                 # Establish a unsecure connection that is faster
 extra_video_filters=""                    # Extra video filters to add at the end
 dark_mode="${REMARKABLE_DARK:-false}"     # Dark mode
-ssh_key="${SSH_KEY:-~/.ssh/reMarkable}"   # SSH key file
+ssh_key="${SSH_KEY:-~/.ssh/remarkable}"   # SSH key file
 
 # loop through arguments and process them
 while [ $# -gt 0 ]; do
@@ -129,11 +129,14 @@ while [ $# -gt 0 ]; do
 done
 
 ssh_cmd() {
-    echo "[SSH]" "$@" >&2
+# added -o LogLevel=ERROR to suppresses the post-quantum key exchange warning 
+# by setting the SSH log level to ERROR only
+    echo "[SSH]" "$@" >&2	
     ssh -i "$ssh_key" -o ConnectTimeout=1 \
         -o PasswordAuthentication=no \
         -o PubkeyAcceptedKeyTypes=+ssh-rsa \
         -o HostKeyAlgorithms=+ssh-rsa \
+        -o LogLevel=ERROR \
         "root@$remarkable" "$@"
 }
 
