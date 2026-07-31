@@ -25,6 +25,7 @@ video_filters=""                          # list of ffmpeg filters to apply
 unsecure_connection=false                 # Establish a unsecure connection that is faster
 extra_video_filters=""                    # Extra video filters to add at the end
 dark_mode="${REMARKABLE_DARK:-false}"     # Dark mode
+ssh_key="${SSH_KEY:-~/.ssh/reMarkable}"   # SSH key file
 
 # loop through arguments and process them
 while [ $# -gt 0 ]; do
@@ -104,13 +105,19 @@ while [ $# -gt 0 ]; do
             dark_mode=true
             shift
             ;;
+        -i | --identity)
+            ssh_key="$2"
+            shift
+            shift
+            ;;
         -h | --help | *)
-            echo "Usage: $0 [-p] [-c] [-u] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
+            echo "Usage: $0 [-p] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
             echo "Examples:"
             echo "	$0                               # live view in landscape"
             echo "	$0 -p                            # live view in portrait"
             echo "	$0 -c                            # show a cursor where the pen is hovering (rM2 only)"
             echo "	$0 -s 192.168.0.10               # connect to different IP"
+            echo "	$0 -i ~/.ssh/reMarkable          # use specific SSH key"
             echo "	$0 -o remarkable.mp4             # record to a file"
             echo "	$0 -o udp://dest:1234 -f mpegts  # record to a stream"
             echo "	$0 -w --mirror                   # write to a webcam (yuv420p + resize + mirror)"
@@ -123,7 +130,7 @@ done
 
 ssh_cmd() {
     echo "[SSH]" "$@" >&2
-    ssh -o ConnectTimeout=1 \
+    ssh -i "$ssh_key" -o ConnectTimeout=1 \
         -o PasswordAuthentication=no \
         -o PubkeyAcceptedKeyTypes=+ssh-rsa \
         -o HostKeyAlgorithms=+ssh-rsa \
@@ -311,7 +318,9 @@ fi
 
 set -e # stop if an error occurs
 
-restream_options="-h $height -w $width -b $bytes_per_pixel -f $fb_file -s $skip_offset"
+#restream_options="-h $height -w $width -b $bytes_per_pixel -f $fb_file -s $skip_offset"
+# the -s parameter is unknown to the restream command
+restream_options="-h $height -w $width -b $bytes_per_pixel -f $fb_file"
 
 if "$cursor"; then
     restream_options="$restream_options -c"
