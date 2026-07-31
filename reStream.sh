@@ -13,7 +13,7 @@ rm2_firmware_version_3_27="3.27.1.0"
 
 # default values for arguments
 remarkable="${REMARKABLE_IP:-10.11.99.1}" # remarkable IP address
-landscape=true                            # rotate 90 degrees to the right
+landscape=false                           # rotate 90 degrees to the right
 cursor=false                              # show a cursor where the pen is hovering
 output_path=-                             # display output through ffplay
 format=-                                  # automatic output format
@@ -36,6 +36,10 @@ while [ $# -gt 0 ]; do
             ;;
         -p | --portrait)
             landscape=false
+            shift
+            ;;
+        -l | --landscape)
+            landscape=true
             shift
             ;;
         -c | --cursor)
@@ -111,10 +115,11 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         -h | --help | *)
-            echo "Usage: $0 [-p] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
+            echo "Usage: $0 [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
             echo "Examples:"
-            echo "	$0                               # live view in landscape"
+            echo "	$0                               # live view in portrait (default)"
             echo "	$0 -p                            # live view in portrait"
+            echo "	$0 -l                            # live view in landscape"
             echo "	$0 -c                            # show a cursor where the pen is hovering (rM2 only)"
             echo "	$0 -s 192.168.0.10               # connect to different IP"
             echo "	$0 -i ~/.ssh/reMarkable          # use specific SSH key"
