@@ -24,7 +24,7 @@ window_title=reStream                     # stream window title is reStream
 video_filters=""                          # list of ffmpeg filters to apply
 unsecure_connection=false                 # Establish a unsecure connection that is faster
 extra_video_filters=""                    # Extra video filters to add at the end
-crop=false                                # Crop the Remarkable toolbar from the frame edge
+crop=true                                 # Crop the Remarkable toolbar from the frame edge
 dark_mode="${REMARKABLE_DARK:-false}"     # Dark mode
 ssh_key="${SSH_KEY:-~/.ssh/remarkable}"   # SSH key file
 
@@ -114,6 +114,10 @@ while [ $# -gt 0 ]; do
             crop=true
             shift
             ;;
+        --no-crop)
+            crop=false
+            shift
+            ;;
         --grey)
             extra_video_filters="${extra_video_filters:+$extra_video_filters,}eq=brightness=0.1:contrast=0.6"
             shift
@@ -124,7 +128,7 @@ while [ $# -gt 0 ]; do
             shift
             ;;
         -h | --help)
-            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--crop] [--grey] [--hflip]"
+            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--crop] [--no-crop] [--grey] [--hflip]"
             echo "Examples:"
             echo "	$0                               # live view in portrait (default)"
             echo "	$0 10.11.99.1                    # connect to specific IP (same as -s)"
