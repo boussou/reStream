@@ -114,10 +114,11 @@ while [ $# -gt 0 ]; do
             shift
             shift
             ;;
-        -h | --help | *)
-            echo "Usage: $0 [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
+        -h | --help)
+            echo "Usage: $0 [IP] [-p] [-l] [-c] [-u] [-i <keyfile>] [-s <source>] [-o <output>] [-f <format>] [-t <title>] [-m] [-w] [-d] [--hflip]"
             echo "Examples:"
             echo "	$0                               # live view in portrait (default)"
+            echo "	$0 10.11.99.1                    # connect to specific IP (same as -s)"
             echo "	$0 -p                            # live view in portrait"
             echo "	$0 -l                            # live view in landscape"
             echo "	$0 -c                            # show a cursor where the pen is hovering (rM2 only)"
@@ -130,8 +131,18 @@ while [ $# -gt 0 ]; do
             echo "	$0 -u                            # establish a unsecure but faster connection"
             exit 1
             ;;
+        *)
+            # Treat non-option argument as IP address
+            remarkable="$1"
+            shift
+            ;;
     esac
 done
+
+# If no IP was provided via -s or positional argument, use default
+if [ -z "$remarkable" ]; then
+    remarkable="${REMARKABLE_IP:-10.11.99.1}"
+fi
 
 ssh_cmd() {
 # added -o LogLevel=ERROR to suppresses the post-quantum key exchange warning 
